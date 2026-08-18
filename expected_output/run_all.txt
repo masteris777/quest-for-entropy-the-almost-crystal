@@ -1,0 +1,113 @@
+$ python bell_readout.py
+2], patch_size=8000 steps for freq audit, eval on 12000 steps with predeclared structural omegas"
+  },
+  "readout": {
+    "local_time_series_used": true,
+    "global_projection_used_as_detector": false,
+    "mean_error": 0.02066373849733356,
+    "worst_error": 0.028609193356976995,
+    "survives": true
+  },
+  "physicality_audit": {
+    "dynamics_simulated": true,
+    "observer_local": true,
+    "basis_preloaded": false,
+    "notes": "Dynamical matrix diagonalized only for structural audit reference. Observer uses only a blind local patch of the time-series to extract frequencies and weights; no global projection enters the detector."
+  },
+  "claim_boundary": "physical_quasicrystal_readout"
+}
+  [PASS] one listener inside the chain gets its tune (article: a couple of percent): mean 2.1%, worst 2.9%
+  [PASS] and it never looks at the whole chain: local time-series only, no global projection
+
+$ python detector_transfer.py
+Detector transfer: tune on one chain, then score the others
+
+Evaluating Fibonacci (Shift-only transfer)...
+Evaluating Sturmian (Independent phase)...
+Evaluating Logistic Chaos (Independent seed vs its own Chaos Bank)...
+Evaluating Cross-Class (Logistic independent instances on Sturmian Bank)...
+
+Saved metrics_detector_transfer.json
+Verdict: FAIL (realization_specific_localization)
+  [PASS] tuned on the ordered chain, it still matches a chaotic one (article: my detectors treat the two as identical): cross-class match 0.937 where 1 is perfect
+  [PASS] every sample of every family clears the bar (article: it passed everything): fibonacci 100%, sturmian 100%, logistic_chaos 100%
+
+$ python tone_matched_fake.py
+ N=100000
+    iid random ... sep=0.1080
+    phase surrogates (10 seeds) ... mean=0.0001  min=0.0000
+    IAAFT surrogates (10 seeds) ... mean=0.0030  min=0.0001  spec_err=0.2302
+
+  [G5_T5] gamma=5.0, T=5.0s, N=100000
+    iid random ... sep=0.0603
+    phase surrogates (10 seeds) ... mean=0.0000  min=0.0000
+    IAAFT surrogates (10 seeds) ... mean=0.0008  min=0.0000  spec_err=0.2302
+
+  Saved: metrics_tone_matched_fake.json
+  Verdict: FAIL  (spectral_identity_collapses)
+
+  Key gaps (G1_T5):
+    vs iid random:          0.1080
+    vs phase surrogate:     mean=0.0001  min=0.0000
+    vs binary IAAFT:        mean=0.0030  min=0.0001
+  [PASS] a fake with the same tune collapses the first probe (article: the same tune, no deep order): gap against noise 0.1080, against the fake 0.000084 (1285x smaller)
+  [PASS] the fake really does carry the same tune: tone error against the real one: 0.0000
+
+$ python return_time_fake.py
+ting separations ...
+  k=2:
+    Markov min: order1=0.0443, order4=0.0000
+    K-gram min: K2=0.0484, K4=0.2291
+  k=3:
+    Markov min: order1=0.4956, order4=0.2452
+    K-gram min: K2=0.4846, K4=0.1466
+  k=4:
+    Markov min: order1=0.6477, order4=0.2088
+    K-gram min: K2=0.6548, K4=0.0555
+  k=5:
+    Markov min: order1=0.7114, order4=0.1676
+    K-gram min: K2=0.7161, K4=0.4882
+  k=6:
+    Markov min: order1=0.7252, order4=0.1009
+    K-gram min: K2=0.7263, K4=0.4504
+
+  Saved: metrics_return_time_fake.json
+  Verdict: FAIL  (return_time_order_collapses_to_kgram_statistics)
+  Worst Markov gap:   0.0000
+  Worst K-gram gap:   0.0484
+  [PASS] a fake with the same short runs collapses the second probe (article: twice, with two different detectors): worst gap left for it to find: 0.0000000
+
+$ python floor_ruler_test.py
+the traveler's grain-count   (1.000 = honest floor, 0.607 = frame built in)
+  repeating lattice   0.607
+  almost-crystal      0.607
+  random sprinkle     1.010
+
+does making the lattice finer help?
+  coarse lattice      0.590
+  twice as fine       0.595
+  -> stuck at 0.607 either way; fineness is not the cure
+  [PASS] a repeating lattice hands a moving traveler a frame (article: the lattice cheats by a fixed amount): 0.607 against the frame-carrying value 0.607
+  [PASS] the almost-crystal hands over the same frame (article: the same amount, digit for digit): almost-crystal 0.607 vs lattice 0.607
+  [PASS] the random sprinkle deals fair (article: it hides): 1.010, boost-invariant
+  [PASS] making the grain finer does not rescue the lattice: coarse 0.590, twice as fine 0.595 - both stuck at 0.607
+
+$ python make_three_floors.py
+saved: figures\three_floors.png
+  [PASS] the three fingerprints are computed, not drawn: figures/three_floors.png regenerated (1353 KB)
+
+==================================================================
+[PASS] one listener inside the chain gets its tune (article: a couple of percent)
+[PASS] and it never looks at the whole chain
+[PASS] tuned on the ordered chain, it still matches a chaotic one (article: my detectors treat the two as identical)
+[PASS] every sample of every family clears the bar (article: it passed everything)
+[PASS] a fake with the same tune collapses the first probe (article: the same tune, no deep order)
+[PASS] the fake really does carry the same tune
+[PASS] a fake with the same short runs collapses the second probe (article: twice, with two different detectors)
+[PASS] a repeating lattice hands a moving traveler a frame (article: the lattice cheats by a fixed amount)
+[PASS] the almost-crystal hands over the same frame (article: the same amount, digit for digit)
+[PASS] the random sprinkle deals fair (article: it hides)
+[PASS] making the grain finer does not rescue the lattice
+[PASS] the three fingerprints are computed, not drawn
+==================================================================
+all 12 checks reproduced
